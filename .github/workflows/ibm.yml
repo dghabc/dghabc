@@ -43,7 +43,7 @@ jobs:
         ./IBM_Cloud_CLI/ibmcloud target -r eu-gb
         sleep 30s
         
-         ibmcloud cf restart daigh
+         ./IBM_Cloud_CLI/ibmcloud cf restart daigh
         
         
 
