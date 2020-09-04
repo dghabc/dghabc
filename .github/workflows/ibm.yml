@@ -42,7 +42,7 @@ jobs:
 
         ./IBM_Cloud_CLI/ibmcloud target -r eu-gb
         
-        ./IBM_Cloud_CLI/ibmcloud cf restart daigh
+         ibmcloud cf restart daigh
         
         
 
