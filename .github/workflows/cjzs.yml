@@ -1,0 +1,42 @@
+name: IBM Cloud Cjzs Auto Restart
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '0 12 * * FRI'
+
+jobs:
+  ibm-cloud-restart:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Init
+      run: |
+        chmod -R 777 ./IBM_Cloud_CLI/
+    - name: Login IBM Cloud
+      env:
+        CJZS_ACCOUNT: ${{ secrets.CJZS_ACCOUNT }}
+        CJZS_NUM: ${{ secrets.CJZS_NUM }}
+      run: |
+        ./IBM_Cloud_CLI/ibmcloud login <<EOF
+        $CJZS_ACCOUNT
+        $CJZS_NUM
+        no
+        EOF
+    - name: Target IBM Cloud
+      env:
+        CJZS_ID: ${{ secrets.CJZS_ID }}
+      run: |
+        ./IBM_Cloud_CLI/ibmcloud target -g "$CJZS_ID"
+        ./IBM_Cloud_CLI/ibmcloud target --cf
+        ./IBM_Cloud_CLI/ibmcloud cf install -v 6.51.0
+    - name: Restart IBM Cloud
+      env:
+        CJZS_APP_NAME: ${{ secrets.CJZS_APP_NAME }}
+      run: |
+        ./IBM_Cloud_CLI/ibmcloud cf restart "$CJZS_APP_NAME"
